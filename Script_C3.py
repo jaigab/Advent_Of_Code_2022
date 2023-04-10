@@ -2,7 +2,7 @@
 
 import os
 import string
-data=input("What's the filepath for the data")
+data=input("What's the filepath for the data?")
 results=[]
 for i in open(data):results+=[i.strip("\n")]
 
