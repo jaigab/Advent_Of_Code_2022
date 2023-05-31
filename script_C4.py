@@ -1,5 +1,5 @@
 import os
-data=input("What's the filepath for the data")
+data=input("What's the filepath for the data? ")
 puzzle_input = []
 for line in data: puzzle_input += [[line.split("\n")[0].strip('\n').split(',')[0].split("-"),line.strip('\n').split(',')[1].split("-")]]
     

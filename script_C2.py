@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-data=input("What is the filepath for the data?")
+data=input("What is the filepath for the data? ")
 puzzle_input = pd.read_csv(data,header=None)
 
 def clean_input(DATAFRAME):

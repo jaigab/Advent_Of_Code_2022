@@ -2,7 +2,7 @@
 
 import os
 import string
-data=input("What's the filepath for the data")
+data=input("What's the filepath for the data? ")
 puzzle_input=[]
 for i in open(data):puzzle_input+=[i.strip("\n")]
 

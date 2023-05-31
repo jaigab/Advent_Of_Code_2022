@@ -1,6 +1,6 @@
 #Import data and clean data
 
-data=input("What is the filepath for the input data?")
+data=input("What is the filepath for the input data? ")
 results=[]
 for i in open(data): results+=[i.strip('\n')]
 moves=[]

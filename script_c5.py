@@ -1,5 +1,5 @@
 import os
-data=input("What's the filepath for the data?")
+data=input("What's the filepath for the data? ")
 puzzle_input=[]
 for line in open(data):puzzle_input+=[line]
 
