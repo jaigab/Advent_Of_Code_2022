@@ -1,31 +1,25 @@
-#Import data
-
 import os
 data=input("What is the filepath for the data?")
-results=[]
-for i in open(data): results=i
+puzzle_input=[]
+for line in open(data): puzzle_input = line
 
-#Search through data in groups of 4 to see strings with unmatched character
-    
-for j in range(len(results)-4):
-    templist=""
-    for l in range(4):templist+=results[l+j]
-    counter=0
-    for n in templist:
-        if templist.count(n)>=2: counter+=1
-    if counter==0:
-        break
-print("The solution to part 1 is: " + str(j+4))
+def search_string_in_groups_of_n(INPUT,N):
+    for group in range(len(INPUT) - N):
+        group_to_test = ""
+        for character in range(N): group_to_test += INPUT[character + group]
+        counter = 0
+        for character in group_to_test:
+            if group_to_test.count(character) >= 2: counter += 1
+        if counter == 0:
+            break
+    return group
+        
+group_of_4_start_marker = search_string_in_groups_of_n(puzzle_input,4)
+        
+position_of_start_marker = group_of_4_start_marker + 4
+print(str(position_of_start_marker) + " characters need to be processed before the first start-of-packet marker is reached when assesing in groups of 4")
 
-#Search through data in groups of 14 to see strings with unmatched character
-
-for j in range(len(results)-14):
-    tempstr=""
-    for l in range(14): tempstr+=results[l+j]
-    counter=0
-    for n in tempstr:
-        if tempstr.count(n)>=2: counter+=1
-    if counter==0:
-        break
-
-print("The solution to part 2 is: " + str(j+14))
+group_of_14_start_marker = search_string_in_groups_of_n(puzzle_input,14)
+        
+position_of_start_marker = group_of_14_start_marker + 14
+print(str(position_of_start_marker) + " characters need to be processed before the first start-of-packet marker is reached when assesing in groups of 14")

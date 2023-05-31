@@ -1,48 +1,53 @@
-#Import and clean data
-
 import os
+import pandas as pd
+
 data=input("What is the filepath for the data?")
-results=[]
-for i in open(data): results+=[[i[0],i[2]]]
+puzzle_input = pd.read_csv(data,header=None)
 
-#Define rules of Rock, Paper, Scissors 
+def clean_input(DATAFRAME):
+    DATAFRAME["opponent_shape"] = DATAFRAME[0].astype(str).str[0]
+    DATAFRAME["your_shape"] = DATAFRAME[0].astype(str).str[2]
+    cleaned_puzzle_input = DATAFRAME[["opponent_shape","your_shape"]].reset_index()
+    cleaned_puzzle_input["opponent_shape"] = cleaned_puzzle_input["opponent_shape"].map({"A":"Rock","B":"Paper","C":"Scissors"})
+    cleaned_puzzle_input["your_shape"] = cleaned_puzzle_input["your_shape"].map({"X":"Rock","Y":"Paper","Z":"Scissors"})
+    return cleaned_puzzle_input
+
+cleaned_input = clean_input(puzzle_input) 
+
+win , draw, lose = [6,3,0]
+
+rock_outcome_scores, paper_outcome_scores, scissors_outcome_scores = [[draw,lose,win],[win,draw,lose],[lose,win,draw]]
+
+score_for_shape_selection = {"Rock":[1,rock_outcome_scores], "Paper":[2,paper_outcome_scores], "Scissors":[3,scissors_outcome_scores]}
+
+round_totals=[]
+for index, row in cleaned_input.iterrows():
+    round_totals += [[score_for_shape_selection[row['your_shape']][0]]]
+    if row['opponent_shape'] == "Rock" : round_totals[index] += [score_for_shape_selection[row["your_shape"]][1][0]]
+    elif row['opponent_shape'] == "Paper" : round_totals[index] += [score_for_shape_selection[row["your_shape"]][1][1]]
+    elif row['opponent_shape'] == "Scissors" : round_totals[index] += [score_for_shape_selection[row["your_shape"]][1][2]]
     
-itemscore={'X':[1,3,0,6],'Y':[2,6,3,0],'Z':[3,0,6,3]}
+sum_of_rounds=[]
+for item in round_totals: sum_of_rounds+=[sum(item)]
+print("The final score is " + str(sum(sum_of_rounds)))
 
-#Apply rules to dataset
+fixed_score_input = clean_input(puzzle_input) 
+fixed_score_input["your_shape"] = fixed_score_input["your_shape"].map({"Rock":"Lose","Paper":"Draw","Scissors":"Win"})
+fixed_score_input.rename(columns={"your_shape":"outcome"}, inplace=True)
 
-total=[]
-counter=0
-for i in results:
-    total+=[[itemscore[i[1]][0]]]
-    if i[0]=='A': total[counter]+=[itemscore[i[1]][1]]
-    if i[0]=='B': total[counter]+=[itemscore[i[1]][2]] 
-    if i[0]=='C': total[counter]+=[itemscore[i[1]][3]] 
-    counter+=1
+rock, paper, scissors = [1,2,3]
 
-#Total point score for all rounds
+win_shape_scores, draw_shape_scores, lose_shape_scores = [[paper,scissors,rock],[rock,paper,scissors],[scissors,rock,paper]]
+
+score_for_outcome = {"Win":[6,win_shape_scores], "Draw":[3,draw_shape_scores], "Lose":[0,lose_shape_scores]}
+
+round_totals=[]
+for index, row in fixed_score_input.iterrows():
+    round_totals += [[score_for_outcome[row['outcome']][0]]]
+    if row['opponent_shape'] == "Rock" : round_totals[index] += [score_for_outcome[row["outcome"]][1][0]]
+    elif row['opponent_shape'] == "Paper" : round_totals[index] += [score_for_outcome[row["outcome"]][1][1]]
+    elif row['opponent_shape'] == "Scissors" : round_totals[index] += [score_for_outcome[row["outcome"]][1][2]]
     
-total1=[]
-for i in total: total1+=[sum(i)]
-print("Solution to part 1 is: " +str(sum(total1)))
-
-#Define new rules of Rock, Paper, Scissors 
-
-fixed_itemscore={'X':[0,3,1,2],'Y':[3,1,2,3],'Z':[6,2,3,1]}
-
-#Apply new rules to dataset
-
-fixed_strategy=[]
-counter=0
-for i in results: 
-    fixed_strategy+=[[fixed_itemscore[i[1]][0]]]
-    if i[0]=='A': fixed_strategy[counter]+=[fixed_itemscore[i[1]][1]]
-    if i[0]=='B': fixed_strategy[counter]+=[fixed_itemscore[i[1]][2]]
-    if i[0]=='C': fixed_strategy[counter]+=[fixed_itemscore[i[1]][3]]
-    counter+=1
-
-#Total point score for all rounds with new strategy
-    
-fixed_strategy_total=[]
-for i in fixed_strategy: fixed_strategy_total+=[sum(i)]
-print("Solution to part 2 is: " +str(sum(fixed_strategy_total)))
+sum_of_rounds=[]
+for item in round_totals: sum_of_rounds+=[sum(item)]
+print("The final score is " + str(sum(sum_of_rounds)))

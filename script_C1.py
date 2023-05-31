@@ -1,37 +1,32 @@
 import os
 
-#Import data from txt file
+data=input("What's the filepath for the data")
+puzzle_input=[]
+for item in data: puzzle_input+=item.split("\n")
 
-data=input("What's the filepath for the data?")
-results =[]
-for i in open(data): results+=[i]
+def clean_input(PUZZLE_INPUT):  
+    cleaned_puzzle_input = {}
+    elf_index = 0
+    elf_item_list = []
+    for item in PUZZLE_INPUT:
+        if item != '': elf_item_list += [int(item)]
+        else: 
+            cleaned_puzzle_input[elf_index] = elf_item_list
+            elf_item_list = []
+            elf_index += 1
+    return cleaned_puzzle_input
 
-#Clean data and turn into int
+all_elf_item_list = clean_input(puzzle_input)
+        
+total_calories_per_elf={}
+for elf in range(len(all_elf_item_list)):
+    total_calories_per_elf[elf] = sum(all_elf_item_list[elf])
+    
+sorted_calorie_intakes = sorted(total_calories_per_elf.items(), key=lambda x:x[1], reverse=True)
+highest_calorie_intakes = sorted_calorie_intakes[0]
+print("Elf #" + str(highest_calorie_intakes[0]) + " Has the highest calorie intake of " +str(highest_calorie_intakes[1]))
 
-results1={}
-elfcount=0
-tempcal=[]
-for i in results:
-    if i !='\n': tempcal+=[int(i[:-1])]
-    else:
-        results1[elfcount]=tempcal
-        tempcal=[]
-        elfcount+=1
-
-#Calculate total calorie intake for each elf
-
-totalcal={}
-elfcount=0
-for i in results1:
-    totalcal[elfcount]=sum(results1[elfcount])
-    elfcount+=1
-
-#Sort calorie intakes to find highest
-
-print("Solution to part 1 is: " + str(sorted(totalcal.items(), key=lambda x:x[1], reverse=True)[0:3]))
-
-sortedtotalcal=sorted(totalcal.items(), key=lambda x:x[1], reverse=True)
-topthreecal=0
+top_3_calorie_intake_sum = 0
 for item in range(3):
-    topthreecal+=sortedtotalcal[item][1]
-print("Solution to part 2 is: " +str(topthreecal))
+    top_3_calorie_intake_sum += sorted_calorie_intakes[item][1]
+print("The top 3 elves have a combined calorie intake of " + str(top_3_calorie_intake_sum))

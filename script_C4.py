@@ -1,48 +1,34 @@
-#Import data
-
 import os
-data=input("What's the filepath for the data?")
-clean_data=[]
-for i in open(data): 
-    tempv=i.strip('\n').split(',')[0].split("-"),i.strip('\n').split(',')[1].split("-")
-    templist=[]
-    for j in tempv:
-        templist+=[[int(j[0]),int(j[1])]]
-    clean_data+=[templist]
+data=input("What's the filepath for the data")
+puzzle_input = []
+for line in data: puzzle_input += [[line.split("\n")[0].strip('\n').split(',')[0].split("-"),line.strip('\n').split(',')[1].split("-")]]
     
-#Define function to check if one set of numbers inside range of another
-
-def insidecheck(list1,list2):
-    if list2[1]>=list1[1] and list2[0]<=list1[0]:
+def check_numbers_in_range(NUMBERS,NUMBER_RANGE):
+    if int(NUMBER_RANGE[1]) >= int(NUMBERS[1]) and int(NUMBER_RANGE[0]) <= int(NUMBERS[0]):
         return True
-    if list1[1]>=list2[1] and list1[0]<=list2[0]:
+    elif int(NUMBERS[1]) >= int(NUMBER_RANGE[1]) and int(NUMBERS[0]) <= int(NUMBER_RANGE[0]):
         return True
     else:
         return False
-
-#Apply function to dataset and count
     
-boolcheck=[]
-counter=0
-for i in clean_data:
-    boolcheck+=[insidecheck(i[0],i[1])]
-    if insidecheck(i[0],i[1])==True:
-        counter+=1
-print("The solution to part 1 is: " + str(counter))
+assignment_pairs_containment_list = []
+index = 0
+for assignment_pairs in puzzle_input:
+    assignment_pairs_containment_list += [check_numbers_in_range(assignment_pairs[0],assignment_pairs[1])]
+    if check_numbers_in_range(assignment_pairs[0],assignment_pairs[1]) == True:
+        index += 1
+print("There are " +str(index) + " assignment pairs where one range fully contains the other")
 
-#Define function that checks if there is any overlap in ranges
-
-def overlapcheck(list1,list2):
-    for i in range(list1[0],list1[1]+1,1):
-        for j in range(list2[0],list2[1]+1,1):
-            if i==j:
+def check_overlap_between_ranges(RANGE1,RANGE2):
+    for number in range(int(RANGE1[0]),int(RANGE1[1])+1,1):
+        for number2 in range(int(RANGE2[0]),int(RANGE2[1])+1,1):
+            if number == number2:
                 return True
-                break
-
-#Apply function to dataset and count                
+                break                
                 
-counter=0
-for i in clean_data:
-    if overlapcheck(i[0],i[1]) == True:
-        counter+=1
-print("The solution to part 2: " + str(counter))
+index = 0
+for assignment_pairs in puzzle_input:
+    if check_overlap_between_ranges(assignment_pairs[0],assignment_pairs[1]) == True:
+        index += 1
+        
+print("There are " +str(index) + " assignment pairs where one range overlaps the other")

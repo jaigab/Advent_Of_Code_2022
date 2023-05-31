@@ -2,57 +2,44 @@
 
 import os
 import string
-data=input("What's the filepath for the data?")
-results=[]
-for i in open(data):results+=[i.strip("\n")]
+data=input("What's the filepath for the data")
+puzzle_input=[]
+for i in open(data):puzzle_input+=[i.strip("\n")]
 
-#Define letter mapping to priority number
-
-alph_map={}
-for i in range(1,27):
-    alph_map[list(string.ascii_lowercase)[i-1]]=i
-    alph_map[list(string.ascii_uppercase)[i-1]]=i+26
-compart_results=[]
-
-#Split strings into items in each compartment
-
-for i in results: compart_results+=[[i[:(int(len(i)/2))],i[(int(len(i)/2)):]]]
+def item_not_matching(STRING1,STRING2):
+    for item in STRING1:
+        if STRING2.find(item) != -1: not_matched_list = [item]
+    return not_matched_list   
     
-#Define function to find not matching letter in 2 strings
+alphabet_to_number_map={}
+for number in range(1,27):
+    alphabet_to_number_map[list(string.ascii_lowercase)[number-1]]=number
+    alphabet_to_number_map[list(string.ascii_uppercase)[number-1]]=number+26
     
-def letter_notmatch(string1,string2):
-    for i in string1:
-        if string2.find(i) != -1: unmatched=[i]
-    return unmatched
+rucksacks=[]
 
-#Apply fucntion to all items in data and map items to numbers then sum
+for rucksack in puzzle_input: rucksacks += [[rucksack[:(int(len(rucksack)/2))],rucksack[(int(len(rucksack)/2)):]]]
 
-nmatch_list=[]
-for i in compart_results: nmatch_list+=letter_notmatch(i[0],i[1])
-prio_match=[]
-for i in nmatch_list:prio_match+=[alph_map[i]]
-print("Solution to part 1 is: "+str(sum(prio_match)))
+not_matched_list = []
+for rucksack in rucksacks: not_matched_list += item_not_matching(rucksack[0],rucksack[1])
+item_prioritization_mapping = []
+for item in not_matched_list: item_prioritization_mapping += [alphabet_to_number_map[item]]
+print("The sum of the priorities of the items that appear in both compartments of each rucksack is " + str(sum(item_prioritization_mapping)))
 
-#Clean data and group into 3s
+def items_matching_in_3_group(STRING1,STRING2,STRING3):
+    matched_string_1_2 = []
+    matched_string_1_2_3 = []
+    for item in STRING1: 
+        if STRING2.find(item) != -1: matched_string_1_2 += [item]
+    for item in matched_string_1_2:
+        if STRING3.find(item) != -1: matched_string_1_2_3 = [item]
+    return matched_string_1_2_3
 
-part2_results=[]
-for i in range(0,len(results1),3): part2_results+=[[results1[i],results1[i+1],results1[i+2]]]
-    
-#Define function to find matching letters in 3 strings
+three_rucksacks_groups = []
+for index in range(0,len(puzzle_input),3): three_rucksacks_groups += [[puzzle_input[index],puzzle_input[index + 1],puzzle_input[index + 2]]]
 
-def letter_match(string1,string2,string3):
-    matched1=[]
-    matched2=[]
-    for i in string1: 
-        if string2.find(i) != -1: matched1+=[i]
-    for j in matched1:
-        if string3.find(j) != -1: matched2=[j]
-    return matched2
-
-#Apply function to all items in data and map to numbers then sum
-
-nmatch_list=[]
-for i in part2_results: nmatch_list+=letter_match(i[0],i[1],i[2])
-prio_match=[]
-for i in nmatch_list: prio_match+=[alph_map[i]]
-print("Solution to part 2 is: " +str(sum(prio_match)))
+badge_list = []
+for three_elf_group in three_rucksacks_groups: badge_list += items_matching_in_3_group(three_elf_group[0],three_elf_group[1],three_elf_group[2])
+item_prioritization_mapping = []
+for badge in badge_list: item_prioritization_mapping += [alphabet_to_number_map[badge]]
+print("The sum of the priorities of each three-elf group is " + str(sum(item_prioritization_mapping)))

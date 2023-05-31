@@ -1,77 +1,66 @@
-#Import data
-
 import os
 data=input("What's the filepath for the data?")
-results=[]
-for i in open(data):results+=[i]
+puzzle_input=[]
+for line in open(data):puzzle_input+=[line]
 
-#Clean crates data
-
-crates=[]
-for i in results[:9]:
-    templ=[]
-    for j in i: templ.append(j)
-    crates+=[templ]
-
-#Turn crate data into a dictionary and transpose
-
-cratedict={}
-counter=0
-for i in range(1,34,4):
-    templist=[]
-    for j in reversed(range(0,8)): templist+=[crates[j][i]]
-    counter+=1
-    cratedict[counter]=templist
-clean_cratedict={}
-for j in range(1,len(cratedict)+1):
-    templist=[]
-    for i in range(len(cratedict[j])):
-        if cratedict[j][i]!=' ': templist+=[cratedict[j][i]]
-    clean_cratedict[j]=templist
-
-#Clean move instruction data
-
-cleaned_instr=[]
-for i in results[10:]: cleaned_instr+=[[int(i.split()[1]),int(i.split()[3]),int(i.split()[5])]]
-
-#Define function that applies the move instructions to the crate dictionary
-
-def cratemove(cratediction,move):
-    for i in range(move[0]):
-        cratediction[move[2]].append(cratediction[move[1]][-1])
-        cratediction[move[1]].pop()
-    return cratediction    
+def clean_puzzle_input(INPUT):
+    OUTPUT=[]
+    for line in INPUT[:9]:
+        item_list=[]
+        for item in line: item_list.append(item)
+        OUTPUT+=[item_list]
+        
+    crate_dictionary={}
+    index = 0
+    for stack in range(1,34,4):
+        crate_info=[]
+        for crate in reversed(range(0,8)): crate_info += [OUTPUT[crate][stack]]
+        index += 1
+        crate_dictionary[index] = crate_info
+        
+    clean_crate_dictionary={}
+    for crate in range(1,len(crate_dictionary)+1):
+        crate_info=[]
+        for stack in range(len(crate_dictionary[crate])):
+            if crate_dictionary[crate][stack]!=' ': crate_info += crate_dictionary[crate][stack]
+        clean_crate_dictionary[crate]=crate_info
+        
+    clean_instructions=[]
+    for instruction in puzzle_input[10:]: clean_instructions+=[[int(instruction.split()[1]),int(instruction.split()[3]),int(instruction.split()[5])]]
     
-#Apply function to data and create string of top crates in each piles
+    return clean_crate_dictionary,clean_instructions
 
-for i in cleaned_instr: cratemove(clean_cratedict,i)
+cleaned_input , cleaned_instruction = clean_puzzle_input(puzzle_input)
 
-lastcrate=""
-for i in range(1,10): lastcrate+=clean_cratedict[i][-1]
-print("The solution to part 1 is :" + str(lastcrate))
-
-#Turn crate data into a dictionary and transpose
-
-clean_cratedict={}
-for j in range(1,len(cratedict)+1):
-    templist=[]
-    for i in range(len(cratedict[j])):
-        if cratedict[j][i]!=' ': templist+=[cratedict[j][i]]
-    clean_cratedict[j]=templist
+class StackOfCrates:
+    def __init__(self, dictionary):
+        self.stacks = dictionary
+        
+    def move_crates_part1(self,instruction):
+        for move in range(instruction[0]):
+            self.stacks[instruction[2]].append(self.stacks[instruction[1]][-1])
+            self.stacks[instruction[1]].pop() 
     
-#Define new function    
+    def move_crates_part2(self,instruction):
+        templ=[]
+        for i in range(instruction[0]):
+            templ=templ+[self.stacks[instruction[1]][-1]]
+            self.stacks[instruction[1]].pop()
+        for j in reversed(range(len(templ))): self.stacks[instruction[2]].append(templ[j])        
+        
+crate_stacks = StackOfCrates(cleaned_input)            
+
+for instruction in cleaned_instruction: crate_stacks.move_crates_part1(instruction)  
     
-def cratemove9001(cratedict,move):
-    templ=[]
-    for i in range(move[0]):
-        templ=templ+[cratedict[move[1]][-1]]
-        cratedict[move[1]].pop()
-    for j in reversed(range(len(templ))): cratedict[move[2]].append(templ[j])
-    return cratedict
+last_crate=""
+for stack in range(1,10): last_crate += crate_stacks.stacks[stack][-1]
+print("The crates that end up at the top of each stack are " + str(last_crate))
 
-#Apply function to data and create string of top crates in each piles
+cleaned_input , cleaned_instruction = clean_puzzle_input(puzzle_input)
 
-for l in cleaned_instr: cratemove9001(clean_cratedict,l)
-lastcrate=""
-for i in range(1,10): lastcrate+=clean_cratedict[i][-1]
-print("The solution to part 2 is : " +str(lastcrate))
+crate_stacks = StackOfCrates(cleaned_input) 
+
+for instruction in cleaned_instruction: crate_stacks.move_crates_part2(instruction)
+last_crate=""
+for stack in range(1,10): last_crate += crate_stacks.stacks[stack][-1]
+print("The crates that end up at the top of each stack are " + str(last_crate))
