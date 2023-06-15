@@ -14,8 +14,13 @@ This project is ongoing and I am currently on day 11/25
   Skills shown
   </h2>
 
-* **Day 1**: Multiple regression
-* **Day 2**: Multiple regression
-* **Day 3**: Kmeans++
-* **Day 4**: NLP - Multinomial Naive Bayes classification
-* **Day 5**: K-Nearest-Neighbour
+* **Day 1**: N/A
+* **Day 2**: pandas
+* **Day 3**: N/A
+* **Day 4**: N/A
+* **Day 5**: Object-oriented programming
+* **Day 6**: N/A
+* **Day 7**: N/A
+* **Day 8**: N/A
+* **Day 9**: Object-oriented programming
+* **Day 10**: Object-oriented programming
