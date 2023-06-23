@@ -15,4 +15,4 @@ This project is ongoing and I am currently on day 11/25
   </h2>
 
 * **Object-oriented programming**: Days 5,9,10
-* **pands**: Day 2
+* **pandas**: Day 2
