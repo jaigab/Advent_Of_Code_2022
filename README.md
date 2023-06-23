@@ -8,7 +8,7 @@ The questions can be found [here](https://adventofcode.com/2022/), alongside inp
 
 The uploaded scripts may be "complete" but they are regularly updated to improve efficiency and readibility. 
 
-This project is ongoing and I am currently on day 11/25
+This project is ongoing and I am currently on day 12/25
 
 <h2>
   Skills shown
