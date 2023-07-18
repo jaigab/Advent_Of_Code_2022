@@ -6,7 +6,7 @@ This repository contains my solutions for the 2022 Advent of Code written in pyt
 
 The questions can be found [here](https://adventofcode.com/2022/), alongside input datasets that are different for each user.
 
-The uploaded scripts may be "complete" but they are regularly updated to improve efficiency and readibility. 
+The uploaded scripts may be "complete" but they are regularly updated to improve efficiency and readability. 
 
 This project is ongoing and I am currently on day 12/25
 
